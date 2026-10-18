@@ -293,6 +293,7 @@ $config = require __DIR__ . '/config.php';
         <p>Tecnologia, estratégia e criatividade<br>para transformar o seu negócio.</p>
         <div class="footer-links">
             <a id="whatsapp-link" class="button outline" href="#contacto">WhatsApp ↗</a>
+            <a href="https://github.com/djgregui" target="_blank" rel="noopener noreferrer" class="button outline">GitHub ↗</a>
             <a href="https://www.linkedin.com/in/guilherme95gregorio/" target="_blank" rel="noopener noreferrer" class="button outline">LinkedIn ↗</a>
         </div>
     </div>
