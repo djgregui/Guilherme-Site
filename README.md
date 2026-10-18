@@ -7,6 +7,7 @@ Portfólio pessoal voltado à apresentação de projetos, trajetória profission
 A proposta conecta experiência em operações e gestão à criação de websites, sistemas e automações, com uma interface visual e interativa.
 
 🌐 **Site:** https://www.guilhermegregorio.com/
+
 📦 **Repositório:** https://github.com/djgregui/Guilherme-Site
 
 ## Visão geral
