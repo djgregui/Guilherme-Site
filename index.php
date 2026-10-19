@@ -32,6 +32,47 @@ function tr_html(string $key): string {
         <meta name="description" content="<?= tr('seo.description') ?>">
         <meta name="theme-color" content="#0047ff">
         <title><?= tr('seo.title') ?></title>
+        
+        <!-- SEO: URLs dos idiomas -->
+        <link rel="canonical"
+            href="https://guilhermegregorio.com/?lang=<?= $lang ?>">
+        <link rel="alternate" hreflang="pt-PT"
+            href="https://guilhermegregorio.com/?lang=pt">
+        <link rel="alternate" hreflang="en"
+            href="https://guilhermegregorio.com/?lang=en">
+        <link rel="alternate" hreflang="x-default"
+            href="https://guilhermegregorio.com/">
+        <!-- Open Graph: partilhas em redes sociais -->
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="Guilherme Gregório">
+        <meta property="og:locale"
+            content="<?= $lang === 'en' ? 'en_US' : 'pt_PT' ?>">
+        <meta property="og:title"
+            content="<?= tr('seo.title') ?>">
+        <meta property="og:description"
+            content="<?= tr('seo.description') ?>">
+        <meta property="og:url"
+            content="https://guilhermegregorio.com/?lang=<?= $lang ?>">
+        <meta property="og:image"
+            content="https://guilhermegregorio.com/assets/guilherme.png">
+        <!-- Pré-visualização para X/Twitter -->
+        <meta name="twitter:card" content="summary">
+        
+        <!-- Dados estruturados: identidade profissional -->
+        <script type="application/ld+json">
+        <?= json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Person',
+            'name' => 'Guilherme Gregório',
+            'url' => 'https://guilhermegregorio.com/',
+            'image' => 'https://guilhermegregorio.com/assets/guilherme.png',
+            'jobTitle' => $lang === 'en'
+                ? 'Web Developer and Software Creator'
+                : 'Desenvolvedor Web e Criador de Software',
+            'description' => $translations['seo.description']
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>
+        </script>
+
         <link rel="stylesheet" href="style.css">
         <script>
             window.SITE_CONFIG = <?= json_encode(
