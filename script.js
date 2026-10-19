@@ -1,16 +1,24 @@
 /* CONFIGURAÇÃO: número internacional sem +, espaços ou pontuação.
    Obtido do site original. Confirme antes de publicar. */
 const CONFIG = window.SITE_CONFIG;
+const TEXT = window.SITE_I18N || {};
+const t = (key) => TEXT[key] || key;
+// Preserve secção atual ao mudar o idioma (o servidor guarda a preferência num cookie).
+document.querySelectorAll('.language-switcher a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.location.hash) link.href = link.href.split('#')[0] + window.location.hash;
+  });
+});
 /* Conteúdos dos projetos: edite aqui. Prints originais em assets/. */
 const PROJECTS = {
- escaler:{title:'Escaler',category:'02 / E-COMMERCE',copy:'Desenvolvimento de loja online de roupas e acessórios, com coleções, slides, contas de utilizadores e gestão de conteúdos. A composição do card é ilustrativa.',tags:['E-commerce','Coleções','Gestão de conteúdos'],url:'https://escaler.com.br/'},
- aguiar:{title:'EstéticaAguiar',category:'03 / ESTÉTICA AUTOMOTIVA',copy:'Website de apresentação de serviços de estética automotiva de Gabriel Aguiar. Desenvolvimento da presença digital, organização de conteúdos e gestão de médias. A marca preta e amarela apresentada é a logo original fornecida.',tags:['Estética automotiva','Website','Gestão de conteúdos'],url:'https://www.esteticaguiar.net/'}
+ escaler:{title:'Escaler',category:t('js.escaler.category'),copy:t('js.escaler.copy'),tags:['E-commerce',t('js.escaler.collections'),t('js.escaler.content')],url:'https://escaler.com.br/'},
+ aguiar:{title:'EstéticaAguiar',category:t('js.aguiar.category'),copy:t('js.aguiar.copy'),tags:[t('js.aguiar.tag'),'Website',t('js.escaler.content')],url:'https://www.esteticaguiar.net/'}
 };
 let selectedType='sistema';
 const AREAS={
- mecanica:{description:'Organização técnica dos veículos e do trabalho de manutenção.',modules:['Manutenção','Pneus','Estoque','Frota','Abastecimento','Lubrificação','Higienização']},
- administracao:{description:'Informação administrativa e comunicação centralizadas.',modules:['RH','Administração','Contabilidade','Marketing','Chat']},
- operacao:{description:'Registo e acompanhamento da atividade operacional.',modules:['Apontamento','Fiscalização','Ocorrências']}
+ mecanica:{description:t('js.area.mechanics'),modules:[t('js.module.maintenance'),t('js.module.tyres'),t('js.module.inventory'),t('js.module.fleet'),t('js.module.fuel'),t('js.module.lubrication'),t('js.module.cleaning')]},
+ administracao:{description:t('js.area.admin'),modules:['HR',t('tag.administration'),t('js.module.accounting'),t('js.module.marketing'),'Chat']},
+ operacao:{description:t('js.area.operations'),modules:[t('js.module.log'),t('js.module.inspection'),t('js.module.incidents')]}
 };
 const areaTabs=[...document.querySelectorAll('[data-area]')];
 function selectArea(button){
@@ -77,18 +85,20 @@ dialog.addEventListener('click',event=>{const rect=dialog.getBoundingClientRect(
 document.querySelector('#dialog-cta').addEventListener('click',()=>dialog.close());
 
 // Seleção de projeto e briefing. Não há armazenamento nem envio automático de dados.
-const prompts={site:'O que gostaria de apresentar no seu site?',sistema:'Qual é o problema que quer resolver?',automação:'Que tarefa gostaria de automatizar?'};
+const prompts={site:t('js.prompt.site'),sistema:t('contact.idea.label'),automação:t('js.prompt.automation')};
 document.querySelectorAll('[data-type]').forEach(button=>button.addEventListener('click',()=>{
   selectedType=button.dataset.type;
   document.querySelectorAll('[data-type]').forEach(item=>{const active=item===button;item.classList.toggle('selected',active);item.setAttribute('aria-pressed',String(active));item.querySelector('i').textContent=active?'✓':'↗';});
   document.querySelector('#idea-label').firstChild.textContent=prompts[selectedType];
 }));
 function whatsappUrl(text){return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;}
-const whatsapp=document.querySelector('#whatsapp-link');whatsapp.href=whatsappUrl('Olá Guilherme! Gostaria de conversar sobre um projeto.');whatsapp.target='_blank';whatsapp.rel='noopener noreferrer';
+const whatsapp=document.querySelector('#whatsapp-link');whatsapp.href=whatsappUrl(t('js.whatsapp.initial'));whatsapp.target='_blank';whatsapp.rel='noopener noreferrer';
 document.querySelector('#brief-form').addEventListener('submit',event=>{
   event.preventDefault();const form=event.currentTarget;const name=form.elements.nome.value.trim();const idea=form.elements.ideia.value.trim();
-  if(!name||!idea){const input=!name?form.elements.nome:form.elements.ideia;input.setCustomValidity('Preencha este campo com algum texto.');input.reportValidity();input.addEventListener('input',()=>input.setCustomValidity(''),{once:true});return;}
-  const text=`Olá Guilherme! Sou ${name}. Gostaria de conversar sobre um projeto de ${selectedType}.\n\n${idea}`;
+  if(!name||!idea){const input=!name?form.elements.nome:form.elements.ideia;input.setCustomValidity(t('js.error.required'));input.reportValidity();input.addEventListener('input',()=>input.setCustomValidity(''),{once:true});return;}
+  const typeLabel = {'site': t('js.whatsapp.type.site'), 'sistema': t('js.whatsapp.type.system'), 'automação': t('js.whatsapp.type.automation')}[selectedType];
+  const text = t('js.whatsapp.template')
+    .replaceAll('{{name}}', name).replaceAll('{{type}}', typeLabel).replaceAll('{{idea}}', idea);
   // Navegação direta evita bloqueadores de popups. O visitante revê a mensagem antes de enviar.
   window.location.assign(whatsappUrl(text));
 });
